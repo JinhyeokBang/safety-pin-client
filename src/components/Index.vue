@@ -22,6 +22,7 @@
                     </v-toolbar>
                     <v-list class="pt-0" dense>
                         <v-divider></v-divider>
+
                         <v-list-tile v-for="item in items" :key="item.title">
                             <v-list-tile-action>
                                 <v-btn :to="item.to" icon>
@@ -40,6 +41,7 @@
             <section class="content">
                 <v-layout column="">
                     <v-jumbotron color="grey lighten-2" v-if="isLogin">
+
                         <v-container fill-height>
                             <v-layout align-center>
                                 <v-flex>
@@ -97,6 +99,7 @@
                                         </v-list-tile-avatar>
                                         <v-list-tile-content>
                                             <v-list-tile-title v-html="contact.name"></v-list-tile-title>
+
                                             <v-list-tile-sub-title class="text--primary"></v-list-tile-sub-title>
                                         </v-list-tile-content>
                                         <v-list-tile-action>
