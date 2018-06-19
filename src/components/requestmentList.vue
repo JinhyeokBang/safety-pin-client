@@ -1,7 +1,7 @@
 <template>
     <ul>
       <li v-for="requestment in requestments" :key="requestment.id">
-        {{requestment.id}}
+        {{ requestment.id }}
         <button @click="accept(requestment.id)">수락</button>
         <button @click="ignore(requestment.id)">거절</button>
       </li>

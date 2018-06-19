@@ -19,7 +19,7 @@
                   <v-text-field v-model="info" label="소개" required></v-text-field>
                   <v-text-field v-model="email" label="E-mail" required></v-text-field>                  
                   <v-text-field v-model="password" label="Password" type="password" required></v-text-field>
-                  <v-btn color="info" flat @click="signup(email, password)">회원가입</v-btn>
+                  <v-btn color="info" flat @click="signup(email, password, classNumber, info)">회원가입</v-btn>
                 </v-form>
               </v-card>
             </section>
@@ -48,11 +48,11 @@ export default {
         return true
       return false
     },
-    signup(email, password) {
+    signup(email, password, classNumber, info) {
       if(!this.checkForm(email, password))
         return false
 
-      this.signupMethod(this.session, email, password, classNumber, info)
+      this.signupSuccessed(this.session, email, password, classNumber, info)
     },
     signupSuccessed(session) {
       this.$session.start()
@@ -72,7 +72,7 @@ export default {
         info: this.info
       })
       .then((result) => {
-
+        signupSuccessed(result.data.message.session)
       })
       .catch((err) => {
         
