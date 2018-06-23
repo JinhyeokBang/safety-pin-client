@@ -37,7 +37,6 @@
     methods: {
       checkForm(email, password) {
         return email && password;
-
       },
       signin(email, password) {
         if (!this.checkForm(email, password)) return false;
@@ -48,12 +47,13 @@
         this.$http.post(`${baseURI}/account/t/login`, {
           email: this.email,
           password: this.password
-        }).then((result) => this.signinSuccessed(result.data.message.session))
+        }).then((result) => this.signinSuccessed(result.data.message.session, result.data.message.name))
           .catch((err) => alert(err))
       },
-      signinSuccessed(session) {
+      signinSuccessed(session, name) {
         this.$session.start();
         this.$session.set('session', session);
+        this.$session.set('name', name);
         this.$router.push('/')
       },
       getSession() {
@@ -62,7 +62,7 @@
     },
     created() {
       if (this.$session.exists()) this.$router.push('/SignoutPlease');
-      this.session = this.getSession()
+      this.session = this.getSession();
     }
   }
 </script>
