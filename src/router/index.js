@@ -44,7 +44,7 @@ export default new Router({
       component: Calendar
     },
     {
-      path: '/chat',
+      path: '/chat/:child_id',
       name: 'Chat',
       component: ChatList
     },

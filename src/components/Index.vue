@@ -2,7 +2,7 @@
     <v-app>
         <section class="main-container">
             <nav class="nav-container">
-                <v-navigation-drawer :mini-variant.sync="open" v-model="drawer" stateless hide-overlay>
+                <v-navigation-drawer v-model="drawer" stateless>
                     <v-toolbar flat class="transparent">
                         <v-list class="pa-0">
                             <v-list-tile avatar>
@@ -14,9 +14,9 @@
                     </v-toolbar>
                     <v-list class="pt-0" dense>
                         <v-divider></v-divider>
-                        <v-list-tile v-for="item in items" :key="item.title">
+                        <v-list-tile v-for="item in items" :key="item.title" :to="item.to">
                             <v-list-tile-action>
-                                <v-btn :to="item.to" icon>
+                                <v-btn icon>
                                     <v-icon>{{ item.icon }}</v-icon>
                                 </v-btn>
                             </v-list-tile-action>
@@ -24,11 +24,20 @@
                                 <v-list-tile-title>{{ item.title }}</v-list-tile-title>
                             </v-list-tile-content>
                         </v-list-tile>
+                        <v-list-tile @click="signout">
+                            <v-list-tile-action>
+                                <v-btn icon>
+                                    <v-icon>lock_open</v-icon>
+                                </v-btn>
+                            </v-list-tile-action>
+                            <v-list-tile-content>
+                                <v-list-tile-title>Logout</v-list-tile-title>
+                            </v-list-tile-content>
+                        </v-list-tile>
                     </v-list>
                     <v-spacer></v-spacer>
                 </v-navigation-drawer>
             </nav>
-
             <section class="content">
                 <v-layout column="">
                     <v-jumbotron color="grey lighten-2" v-if="!isLogin">
@@ -42,7 +51,7 @@
                             </v-layout>
                         </v-container>
                     </v-jumbotron>
-                    <v-layout row justify-center v-if="isLogin">
+                    <v-layout row justify-center v-if="isLogin" style="padding-top:25px">
                         <v-flex sm10 lg6>
                             <v-card>
                                 <v-list subheader>
@@ -81,8 +90,7 @@
         items: [
           {title: 'Home', icon: 'dashboard', to: '/'},
           {title: 'Chat', icon: 'question_answer', to: '/chat'},
-          {title: 'Calendar', icon: 'date_range', to: '/calendar'},
-          {title: 'Logout', icon: 'door-open', to: '/calendar'}
+          {title: 'Calendar', icon: 'date_range', to: '/calendar'}
         ],
         contacts: [],
         requests: [],
@@ -115,8 +123,7 @@
             })
 
           });
-        })
-          .catch((err) => alert(err))
+        }).catch((err) => alert(err))
       }
     }
   }
