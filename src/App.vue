@@ -1,10 +1,5 @@
 <template>
-  <div id="app">
-    <header>
-      <!-- <router-link to="/">Main</router-link> -->
-    </header>
-    <router-view/>
-  </div>
+  <router-view/>
 </template>
 
 <script>

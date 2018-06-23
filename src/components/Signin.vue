@@ -12,7 +12,7 @@
               <v-card class="login-form">
                 <!-- <input type="email" v-model="email" id="signinEmail" placeholder="아이디"/> -->
                 <!-- <input type="password" v-model="password" id="signinPassword" placeholder="비밀번호"/> -->
-                <v-form>
+                <v-form @keyup.enter.native="signin(email, password)">
                   <v-text-field v-model="email" label="E-mail" required></v-text-field>
                   <v-text-field v-model="password" label="Password" type="password" required></v-text-field>
                   <v-btn color="info" flat @click="signin(email, password)">로그인</v-btn>
@@ -32,8 +32,8 @@ export default {
   name: 'Signin',
   data() {
       return {
-            email: "",
-            password: ""
+        email: "",
+        password: ""
       }
   },
   methods: {
@@ -56,7 +56,7 @@ export default {
           password: this.password
         })
         .then((result) => {
-          this.signinSuccessed(result.data.message.session);
+          this.signinSuccessed(result.data.message.session)
         })
         .catch((err) => {
           alert(err)

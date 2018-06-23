@@ -49,7 +49,7 @@
                                         eum, ne nam essent vocent admodum.</span>
                                     <v-divider class="my-3"></v-divider>
                                     <div class="title mb-3">Check out our newest features!</div>
-                                    <v-btn large color="primary" class="mx-0">See more</v-btn>
+                                    <v-btn large color="primary" class="mx-0" @click="signout()">sign out</v-btn>
                                 </v-flex>
                             </v-layout>
                         </v-container>
@@ -60,7 +60,7 @@
                                 <v-flex>
                                     <h3 class="display-3">로그인 하세요</h3>
                                     <span class="subheading">사이트에 왔음 로그인을 해야할 거 아녀 ㅡㅡ</span>
-                                    <v-btn large color="primary" class="mx-0" @click="loginButtonClicked()">Login</v-btn>
+                                    <v-btn large color="primary" class="mx-0" to="/signin">Login</v-btn>
                                 </v-flex>
                             </v-layout>
                         </v-container>
@@ -82,25 +82,6 @@
                                             <v-btn to="/chat/(roomid)" icon>
                                                 <v-icon color="primary">chat_bubble</v-icon>
                                             </v-btn>
-                                        </v-list-tile-action>
-                                    </v-list-tile>
-                                </v-list>
-                            </v-card>
-                        </v-flex>
-                        <v-flex sm6 lg4>
-                            <v-card>
-                                <v-list subheader>
-                                    <v-subheader>연락처</v-subheader>
-                                    <v-list-tile v-for="(contact, key) in contacts" :key="key" avatar>
-                                        <v-list-tile-avatar>
-                                            <v-icon>account_circle</v-icon>
-                                        </v-list-tile-avatar>
-                                        <v-list-tile-content>
-                                            <v-list-tile-title v-html="contact.name"></v-list-tile-title>
-                                            <v-list-tile-sub-title class="text--primary"></v-list-tile-sub-title>
-                                        </v-list-tile-content>
-                                        <v-list-tile-action>
-                                            <v-icon :color="contact.active ? 'teal' : 'grey'">chat_bubble</v-icon>
                                         </v-list-tile-action>
                                     </v-list-tile>
                                 </v-list>
@@ -150,15 +131,10 @@ export default {
         }
     },
     methods: {
-        replaceLink(link) {
-            this.$router.push(link)
-        },
         signout() {
             this.$session.destroy()
             this.signed = this.$session.exists()
-        },
-        loginButtonClicked() {
-            this.$router.push("./signin")
+            location.reload();
         }
     },
     created() {
