@@ -61,11 +61,27 @@
                                             <v-icon>account_circle</v-icon>
                                         </v-list-tile-avatar>
                                         <v-list-tile-content>
-                                            <v-list-tile-title v-html="contact.name + '(' + contact.num+')'"></v-list-tile-title>
+                                            <v-list-tile-title
+                                                    v-html="`${contact.name}(${contact.num})  학생코드 : ${contact.code}`"></v-list-tile-title>
                                         </v-list-tile-content>
                                         <v-list-tile-action>
                                             <v-btn v-bind:to="'chat/'+ contact.code" icon>
                                                 <v-icon color="primary">chat_bubble</v-icon>
+                                            </v-btn>
+                                        </v-list-tile-action>
+                                    </v-list-tile>
+                                    <v-list-tile>
+                                        <v-list-tile-content style="width:33%">
+                                            <v-text-field v-model="st_name" type="text" placeholder="추가하실 학생의 이름">
+                                            </v-text-field>
+                                        </v-list-tile-content>
+                                        <v-list-tile-content>
+                                            <v-text-field v-model="st_num" type="text" placeholder="추가하실 학생의 학번">
+                                            </v-text-field>
+                                        </v-list-tile-content>
+                                        <v-list-tile-action style="%" icon>
+                                            <v-btn @click="student_add(st_name, st_num)" icon>
+                                                <v-icon color="green">person_add</v-icon>
                                             </v-btn>
                                         </v-list-tile-action>
                                     </v-list-tile>
@@ -97,6 +113,8 @@
         mini: true,
         isLogin: false,
         name: this.$session.get('name'),
+        st_name: '',
+        st_num: ''
       }
     },
     methods: {
@@ -104,7 +122,21 @@
         this.$session.destroy();
         this.signed = this.$session.exists();
         location.reload();
-      }
+      },
+      student_add(name, number) {
+        const baseURI = 'https://letscoding.kr:8888/api/v1';
+        this.$http.post(`${baseURI}/manage/student`, {
+          "session": this.$session.get('session'),
+          name: name,
+          number: number
+        })
+          .then(() => {
+            window.location.reload()
+          })
+          .catch((err) => {
+            alert(err)
+          })
+      },
     },
     created() {
       if (this.$session.exists()) {
