@@ -112,17 +112,13 @@
         const baseURI = 'https://letscoding.kr:8888/api/v1';
         this.$http.post(`${baseURI}/account/t/load`, {
           session: this.$session.get('session')
-        }).then((result) => {
-          console.log(result);
-          result.data.message.forEach(v => {
-            this.contacts.push({
-              name: v['st_name'],
-              code: v['code'],
-              num: v['st_num']
-            })
-
-          });
-        }).catch((err) => alert(err))
+        }).then((result) => result.data.message.forEach(v => {
+          this.contacts.push({
+            name: v['st_name'],
+            code: v['code'],
+            num: v['st_num']
+          })
+        })).catch((err) => alert(err));
       }
     }
   }
@@ -134,6 +130,7 @@
         min-height: 100vh;
         display: flex;
         flex-direction: row;
+        overflow: hidden;
     }
 
     .nav-container {
