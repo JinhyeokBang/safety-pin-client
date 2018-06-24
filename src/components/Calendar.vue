@@ -61,6 +61,11 @@
                                         <v-icon color="red">clear</v-icon>
                                     </v-btn>
                                 </v-list-tile-action>
+                                <v-list-tile-action v-if="contact.accept !== 0">
+                                    <v-btn @click="delpin(contact.pin)" icon>
+                                        <v-icon color="red">clear</v-icon>
+                                    </v-btn>
+                                </v-list-tile-action>
                                 <v-list-tile-action>
                                     <v-btn v-bind:to="'chat/'+ contact.id" icon>
                                         <v-icon color="primary">chat_bubble</v-icon>
@@ -126,13 +131,18 @@
           "session": this.$session.get('session'),
           "id": id
         })
-          .then(() => {
-
-            const list = this.events;
-            Object.keys(this.events).forEach(v => {
-              if (this.events[v].id === id) delete list[v];
-            });
-            this.events = list;
+          .then(() => {window.location.reload()
+          })
+          .catch((err) => {
+            alert(err)
+          })
+      },
+      delpin(pin) {
+        const baseURI = 'https://letscoding.kr:8888/api/v1';
+        this.$http.post(`${baseURI}/pin/delete/${pin}`, {
+          "session": this.$session.get('session'),
+        })
+          .then(() => {window.location.reload()
           })
           .catch((err) => {
             alert(err)
@@ -158,6 +168,7 @@
                 }
                 this.events = list;
               });
+              window.location.reload()
             })
             .catch((err) => {
               alert(err)
