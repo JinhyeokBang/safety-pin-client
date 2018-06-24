@@ -89,7 +89,6 @@
         drawer: true,
         items: [
           {title: 'Home', icon: 'dashboard', to: '/'},
-          {title: 'Chat', icon: 'question_answer', to: '/chat'},
           {title: 'Calendar', icon: 'date_range', to: '/calendar'}
         ],
         contacts: [],
