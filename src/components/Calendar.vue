@@ -39,7 +39,7 @@
                 </v-navigation-drawer>
             </nav>
             <v-layout row justify-center v-if="isLogin" style="padding-top:25px">
-                <v-flex sm10 lg6>
+                <v-flex sm12 lg9>
                     <v-card>
                         <v-list subheader>
                             <v-subheader>요청 목록 및 PIN 관리</v-subheader>
@@ -49,7 +49,7 @@
                                 </v-list-tile-avatar>
                                 <v-list-tile-content>
                                     <v-list-tile-title
-                                            v-html="`${contact.name}(${contact.num})${(contact.pin?`  PIN : ${contact.pin}(${contact.expires})`:'')}`"></v-list-tile-title>
+                                            v-html="`${contact.name}(${contact.num})${(contact.pin?`  PIN : ${contact.pin}(${new Date(contact.expires).toLocaleString()})`:'')}`"></v-list-tile-title>
                                 </v-list-tile-content>
                                 <v-list-tile-action v-if="contact.accept === 0">
                                     <v-btn @click="accept(contact.id)" icon>
@@ -62,7 +62,16 @@
                                     </v-btn>
                                 </v-list-tile-action>
                                 <v-list-tile-action v-if="contact.accept !== 0">
-                                    <v-btn @click="delpin(contact.pin)" icon>
+                                    <v-text-field v-model="expires" type="datetime-local">
+                                    </v-text-field>
+                                </v-list-tile-action>
+                                <v-list-tile-action v-if="contact.accept !== 0">
+                                    <v-btn @click="edit(contact.id, contact.pin, expires)" icon>
+                                        <v-icon color="green">edit</v-icon>
+                                    </v-btn>
+                                </v-list-tile-action>
+                                <v-list-tile-action v-if="contact.accept !== 0">
+                                    <v-btn @click="delpin(contact.id, contact.pin)" icon>
                                         <v-icon color="red">clear</v-icon>
                                     </v-btn>
                                 </v-list-tile-action>
@@ -102,7 +111,9 @@
         events: [],
         session: null,
         name: this.$session.get('name'),
-        isLogin: this.$session.exists()
+        isLogin: this.$session.exists(),
+        expires: null
+
       }
     },
     methods: {
@@ -131,18 +142,34 @@
           "session": this.$session.get('session'),
           "id": id
         })
-          .then(() => {window.location.reload()
+          .then(() => {
+            window.location.reload()
           })
           .catch((err) => {
             alert(err)
           })
       },
-      delpin(pin) {
+      delpin(id, pin) {
         const baseURI = 'https://letscoding.kr:8888/api/v1';
         this.$http.post(`${baseURI}/pin/delete/${pin}`, {
           "session": this.$session.get('session'),
+          id: id
         })
-          .then(() => {window.location.reload()
+          .then(() => {
+            window.location.reload()
+          })
+          .catch((err) => {
+            alert(err)
+          })
+      },
+      edit(id, pin, expires) {
+        const baseURI = 'https://letscoding.kr:8888/api/v1';
+        this.$http.post(`${baseURI}/pin/edit/${pin}`, {
+          "session": this.$session.get('session'),
+          expires: expires.toLocaleString()
+        })
+          .then(() => {
+            window.location.reload()
           })
           .catch((err) => {
             alert(err)
