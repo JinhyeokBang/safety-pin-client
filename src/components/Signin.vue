@@ -26,12 +26,14 @@
 </template>
 
 <script>
+  import api_request from 'api_request'
+
   export default {
     name: 'Signin',
     data() {
       return {
         email: "",
-        password: ""
+        password: "",
       }
     },
     methods: {
@@ -42,27 +44,18 @@
         if (!this.checkForm(email, password)) return false;
         this.signinMethod();
       },
-      signinMethod() {
-        const baseURI = 'https://letscoding.kr:8888/api/v1';
-        this.$http.post(`${baseURI}/account/t/login`, {
-          email: this.email,
-          password: this.password
-        }).then((result) => this.signinSuccessed(result.data.message.session, result.data.message.name))
-          .catch((err) => alert(err))
-      },
-      signinSuccessed(session, name) {
+      signinMethod: () => api_request.signIn(this.email, this.password, result => {
         this.$session.start();
-        this.$session.set('session', session);
-        this.$session.set('name', name);
+        this.$session.set('session', result.data.message.session,);
+        this.$session.set('name', result.data.message.name);
         this.$router.push('/')
-      },
+      }),
       getSession() {
         return this.$session.get('session');
       }
     },
     created() {
-      if (this.$session.exists()) this.$router.push('/SignoutPlease');
-      this.session = this.getSession();
+      if (this.$session.exists()) this.$router.push('/');
     }
   }
 </script>
