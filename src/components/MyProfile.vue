@@ -60,7 +60,7 @@ export default {
     },
     created() {
         if (this.$session.exist)
-            this.$router.push('/SigninPlease')
+            this.$router.push('/signin')
         this.session = this.getSession()
         this.loadProfile(this.session)
     }

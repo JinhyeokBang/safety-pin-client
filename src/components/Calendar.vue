@@ -208,7 +208,7 @@
     },
     created() {
       if (!this.$session.exists())
-        this.$router.push('/SigninPlease');
+        this.$router.push('/signin');
       this.loadCalendar();
       //  setInterval(() => this.loadCalendar(), 5000);
     }
