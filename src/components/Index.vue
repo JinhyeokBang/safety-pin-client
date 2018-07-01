@@ -97,6 +97,8 @@
 </template>
 
 <script>
+  import api_request from "./api_request";
+
   export default {
     name: 'Index',
     data() {
@@ -113,6 +115,7 @@
         mini: true,
         isLogin: false,
         name: this.$session.get('name'),
+        session: this.$session.get('session'),
         st_name: '',
         st_num: ''
       }
@@ -124,18 +127,7 @@
         location.reload();
       },
       student_add(name, number) {
-        const baseURI = 'https://letscoding.kr:8888/api/v1';
-        this.$http.post(`${baseURI}/manage/student`, {
-          "session": this.$session.get('session'),
-          name: name,
-          number: number
-        })
-          .then(() => {
-            window.location.reload()
-          })
-          .catch((err) => {
-            alert(err)
-          })
+        api_request.addStudent({session: this.$session.get('session'), name: name, number: number}, () => window.location.reload());
       },
     },
     created() {
