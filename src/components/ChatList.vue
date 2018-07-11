@@ -1,43 +1,7 @@
 <template>
     <v-app>
         <section class="main-container">
-            <nav class="nav-container">
-                <v-navigation-drawer v-model="drawer" stateless>
-                    <v-toolbar flat class="transparent">
-                        <v-list class="pa-0">
-                            <v-list-tile avatar>
-                                <v-list-tile-content>
-                                    <v-list-tile-title>{{name}}</v-list-tile-title>
-                                </v-list-tile-content>
-                            </v-list-tile>
-                        </v-list>
-                    </v-toolbar>
-                    <v-list class="pt-0" dense>
-                        <v-divider></v-divider>
-                        <v-list-tile v-for="item in items" :key="item.title" :to="item.to">
-                            <v-list-tile-action>
-                                <v-btn icon>
-                                    <v-icon>{{ item.icon }}</v-icon>
-                                </v-btn>
-                            </v-list-tile-action>
-                            <v-list-tile-content>
-                                <v-list-tile-title>{{ item.title }}</v-list-tile-title>
-                            </v-list-tile-content>
-                        </v-list-tile>
-                        <v-list-tile @click="signout">
-                            <v-list-tile-action>
-                                <v-btn icon>
-                                    <v-icon>lock_open</v-icon>
-                                </v-btn>
-                            </v-list-tile-action>
-                            <v-list-tile-content>
-                                <v-list-tile-title>Logout</v-list-tile-title>
-                            </v-list-tile-content>
-                        </v-list-tile>
-                    </v-list>
-                    <v-spacer></v-spacer>
-                </v-navigation-drawer>
-            </nav>
+            <sideMenu :name="name"></sideMenu>
             <section class="content layout row justify-center">
                 <v-list id="chatContent" style="min-width: 50%">
                     <div class="chat-container">
@@ -65,13 +29,12 @@
 </template>
 
 <script>
-  import Chat from '@/components/Chat'
+  import Chat from './Chat'
+  import sideMenu from './sideMenu'
 
   export default {
     name: "ChatList",
-    components: {
-      Chat
-    },
+    components: {Chat, sideMenu},
     methods: {
       getSession() {
         return this.$session.get('session')
@@ -94,10 +57,6 @@
           .catch((err) => alert(err));
         this.chat = "";
       },
-      signout() {
-        this.$session.destroy();
-        location.reload();
-      }
     },
     data() {
       return {

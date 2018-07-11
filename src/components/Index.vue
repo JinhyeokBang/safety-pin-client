@@ -1,16 +1,23 @@
 <template>
     <v-app>
         <section class="main-container">
-            <sideMenu :name="name" :items="items"></sideMenu>
-            <section class="content">
+            <sideMenu :name="name"></sideMenu>
+            <section class="content" style="background-color:#2682FF;">
                 <v-layout column="">
-                    <v-jumbotron color="grey lighten-2" v-if="!isLogin">
+                    <v-jumbotron style="background-color:#2682FF;" v-if="!isLogin">
                         <v-container fill-height>
                             <v-layout align-center>
-                                <v-flex>
-                                    <h3 class="display-3">Safety Pin <span class="subheading">학교를 위한 보안 솔루션</span></h3>
-                                    <span class="subheading">사이트 이용을 위해 로그인을 해주세요. </span>
-                                    <v-btn large color="primary" class="mx-0" to="/signin">Login</v-btn>
+                                <v-flex class="fw">
+                                    <section class="logo">
+                                        <img src="./../assets/icon.png" alt="" srcset="">
+                                        <h1>Safety PIN</h1>
+                                        <span style="font-size:1.5rem">학교를 위한 보안 솔루션</span>
+                                        <span class="subheading">사이트 이용을 위해 로그인을 해주세요. </span>
+                                        <br>
+                                        <a data-v-331f341c="" href="#/signin" class="mx-0 btn btn--large btn--router" style="color: white;">
+                                            <div class="btn__content" style="border: solid;">Login</div>
+                                        </a>
+                                    </section>
                                 </v-flex>
                             </v-layout>
                         </v-container>
@@ -65,17 +72,11 @@
 
   export default {
     name: 'Index',
-    components: {
-      sideMenu: sideMenu
-    },
+    components: {sideMenu},
     data() {
       return {
         signed: this.$session.exists(),
         drawer: true,
-        items: [
-          {title: 'Home', icon: 'dashboard', to: '/'},
-          {title: 'Calendar', icon: 'date_range', to: '/calendar'}
-        ],
         contacts: [],
         requests: [],
         right: null,
@@ -111,12 +112,36 @@
 </script>
 
 <style scoped>
+    .fw {
+        color: white;
+    }
+
     .main-container {
         width: 100%;
         min-height: 100vh;
         display: flex;
         flex-direction: row;
         overflow: hidden;
+    }
+
+    .logo h1 {
+        color: #fff;
+        font-family: 'Open Sans', sans-serif;
+        font-size: 2rem;
+        font-weight: 300;
+    }
+
+    .logo {
+        height: 220px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+    }
+
+    .logo img {
+        width: 120px;
     }
 
     .nav-container {

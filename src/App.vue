@@ -15,4 +15,7 @@ export default {
 
 <style>
 
+  * {
+    font-family: 'Nanum Gothic', sans-serif;
+  }
 </style>
