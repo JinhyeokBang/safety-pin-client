@@ -26,7 +26,7 @@
 </template>
 
 <script>
-  import api_request from 'src/js/api_request'
+  import api_request from '../js/api_request'
 
   export default {
     name: 'Signin',

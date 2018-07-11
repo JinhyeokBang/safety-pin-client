@@ -1,6 +1,6 @@
 <template>
     <nav class="nav-container">
-        <v-navigation-drawer stateless>
+        <v-navigation-drawer v-model="drawer" stateless>
             <v-toolbar flat class="transparent">
                 <v-list class="pa-0">
                     <v-list-tile avatar>
@@ -43,7 +43,14 @@
 
   export default {
     name: "SideMenu",
-    props: ['name', 'items'],
+    props: ['name'],
+    data() {
+      return {
+        drawer: true,
+        items: [{title: 'Home', icon: 'dashboard', to: '/'},
+          {title: 'Calendar', icon: 'date_range', to: '/calendar'}]
+      }
+    },
     methods: {
       signout: () => functions.signOut(this)
     }
