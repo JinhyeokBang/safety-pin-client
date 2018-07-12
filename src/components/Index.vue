@@ -106,6 +106,8 @@
             num: v['st_num']
           })
         })).catch((err) => alert(err));
+      } else {
+        location.href = "/signin";
       }
     }
   }
