@@ -7,5 +7,8 @@ export default {
   signIn: (email, password, cb) => pRequest('/account/t/login', {email: email, password: password}, result =>
     cb(result.data.message.session, result.data.message.name), () => alert('잘못된 ID 또는 패스워드입니다.'), e => alert(e)),
   addStudent: (data, cb) => pRequest('/account/manage/student', data, cb, () => alert('로드 실패'),
-    e => alert(e))
+    e => alert(e)),
+  signUp: (email, password, name, className, info, cb) => pRequest('/account/t/register', {
+    name, email, password, 'class': className, info
+  }, cb, () => alert('회원가입에 실패하였습니다.'), e => alert(e))
 };
