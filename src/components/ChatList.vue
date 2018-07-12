@@ -29,12 +29,11 @@
 </template>
 
 <script>
-  import Chat from './Chat'
   import sideMenu from './sideMenu'
 
   export default {
     name: "ChatList",
-    components: {Chat, sideMenu},
+    components: {sideMenu},
     methods: {
       getSession() {
         return this.$session.get('session')
@@ -73,8 +72,7 @@
       }
     },
     created() {
-      if (!this.$session.exists())
-        this.$router.push('/SigninPlease');
+      if (!this.$session.exists()) this.$router.push('/signin');
       this.session = this.getSession();
       this.loadChatMessageMethod(this.session);
       setInterval(() => this.loadChatMessageMethod(), 5000);

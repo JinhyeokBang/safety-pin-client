@@ -94,21 +94,18 @@
       },
     },
     created() {
-      if (this.$session.exists()) {
-        this.isLogin = true;
-        const baseURI = 'https://letscoding.kr:8888/api/v1';
-        this.$http.post(`${baseURI}/account/t/load`, {
-          session: this.$session.get('session')
-        }).then((result) => result.data.message.forEach(v => {
-          this.contacts.push({
-            name: v['st_name'],
-            code: v['code'],
-            num: v['st_num']
-          })
-        })).catch((err) => alert(err));
-      } else {
-        location.href = "/signin";
-      }
+      if (!this.$session.exists()) this.$router.push('/signin');
+      this.isLogin = true;
+      const baseURI = 'https://letscoding.kr:8888/api/v1';
+      this.$http.post(`${baseURI}/account/t/load`, {
+        session: this.$session.get('session')
+      }).then((result) => result.data.message.forEach(v => {
+        this.contacts.push({
+          name: v['st_name'],
+          code: v['code'],
+          num: v['st_num']
+        })
+      })).catch((err) => alert(err));
     }
   }
 </script>
