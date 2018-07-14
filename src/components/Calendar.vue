@@ -69,9 +69,8 @@
       return {
         right: null,
         events: [],
-        session: null,
+        session: this.$session.get('session'),
         name: this.$session.get('name'),
-        isLogin: this.$session.exists(),
         expires: null
       }
     },
@@ -90,10 +89,6 @@
       },
       getSession() {
         return this.$session.get('session')
-      },
-      signout() {
-        this.$session.destroy();
-        location.reload();
       },
       ignore(id) {
         const baseURI = 'https://letscoding.kr:8888/api/v1';
@@ -166,8 +161,7 @@
 
     },
     created() {
-      if (!this.$session.exists())
-        this.$router.push('/signin');
+      if (!this.$session.exists()) this.$router.push('/signin');
       this.loadCalendar();
       //  setInterval(() => this.loadCalendar(), 5000);
     }
