@@ -11,5 +11,6 @@ export default {
   }, cb, () => alert('회원가입에 실패하였습니다.')),
   addStudent: (data, cb) => pRequest('/manage/student', data, cb, () => console.log('학생을 추가하는데 실패했습니다.')),
   loadStudent: (data, cb) => pRequest('/account/t/load', data, cb, () => console.log('학생목록을 불러오는데 실패했습니다.')),
-  loadChat: (data, cb) => pRequest('/chat/t/load', data, cb, () => console.log('채팅목록을 불러오는데 실패했습니다.'))
+  loadChat: (data, cb) => pRequest('/chat/t/load', data, cb, () => console.log('채팅목록을 불러오는데 실패했습니다.')),
+  sendChat: (data, cb) => pRequest('/chat/t/send', data, cb, () => console.log('채팅을 전송하는는데 실패했습니다.'))
 };
