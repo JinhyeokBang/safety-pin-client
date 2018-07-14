@@ -38,7 +38,6 @@
     },
     methods: {
       signin() {
-        console.log(this.email,this.password);
         (this.email && this.password) ? api_request.signIn(this.email, this.password, result => {
           this.$session.start();
           this.$session.set('session', result.data.message.session);
