@@ -30,6 +30,7 @@
 
 <script>
   import sideMenu from './sideMenu'
+  import api_request from "../js/api_request";
 
   export default {
     name: "ChatList",
@@ -39,12 +40,7 @@
         return this.$session.get('session')
       },
       loadChat() {
-        const baseURI = 'https://letscoding.kr:8888/api/v1';
-        this.$http.post(`${baseURI}/chat/t/load/`, {
-          session: this.session,
-          id: this.$route.params.child_id
-        }).then(result => this.chatMessages = result.data.message.chat)
-          .catch(err => alert(err))
+        api_request({session: this.session, id: this.$route.params.child_id}, r => this.chatMessages = r.message.chat);
       },
       sendChat(chat) {
         const baseURI = 'https://letscoding.kr:8888/api/v1';
