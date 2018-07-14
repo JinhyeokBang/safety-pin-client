@@ -39,6 +39,8 @@
 </template>
 
 <script>
+  import Vue from 'vue'
+
   export default {
     name: "SideMenu",
     props: ['name'],
@@ -50,10 +52,8 @@
       }
     },
     methods: {
-      signout: () => {
-        console.log(this.$session);
+      signout(){
         this.$session.destroy();
-        this.signed = this.$session.exists();
         location.reload();
       }
     }
