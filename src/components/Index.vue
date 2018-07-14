@@ -76,11 +76,8 @@
     data() {
       return {
         signed: this.$session.exists(),
-        drawer: true,
         contacts: [],
         requests: [],
-        right: null,
-        mini: true,
         isLogin: false,
         name: this.$session.get('name'),
         session: this.$session.get('session'),

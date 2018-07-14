@@ -5,7 +5,7 @@
                 <v-list class="pa-0">
                     <v-list-tile avatar>
                         <v-list-tile-content>
-                            <v-list-tile-title>{{name}}</v-list-tile-title>
+                            <v-list-tile-title>{{name}}님, 반갑습니다</v-list-tile-title>
                         </v-list-tile-content>
                     </v-list-tile>
                 </v-list>

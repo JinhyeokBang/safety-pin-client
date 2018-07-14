@@ -1,119 +1,78 @@
 <template>
-    <v-app>
-        <section class="main-container">
-            <nav class="nav-container">
-                <v-navigation-drawer v-model="drawer" stateless>
-                    <v-toolbar flat class="transparent">
-                        <v-list class="pa-0">
-                            <v-list-tile avatar>
-                                <v-list-tile-content>
-                                    <v-list-tile-title>{{name}}</v-list-tile-title>
-                                </v-list-tile-content>
-                            </v-list-tile>
-                        </v-list>
-                    </v-toolbar>
-                    <v-list class="pt-0" dense>
-                        <v-divider></v-divider>
-                        <v-list-tile v-for="item in items" :key="item.title" :to="item.to">
-                            <v-list-tile-action>
-                                <v-btn icon>
-                                    <v-icon>{{ item.icon }}</v-icon>
-                                </v-btn>
-                            </v-list-tile-action>
-                            <v-list-tile-content>
-                                <v-list-tile-title>{{ item.title }}</v-list-tile-title>
-                            </v-list-tile-content>
-                        </v-list-tile>
-                        <v-list-tile @click="signout">
-                            <v-list-tile-action>
-                                <v-btn icon>
-                                    <v-icon>lock_open</v-icon>
-                                </v-btn>
-                            </v-list-tile-action>
-                            <v-list-tile-content>
-                                <v-list-tile-title>Logout</v-list-tile-title>
-                            </v-list-tile-content>
-                        </v-list-tile>
-                    </v-list>
-                    <v-spacer></v-spacer>
-                </v-navigation-drawer>
-            </nav>
-            <v-layout row justify-center v-if="isLogin" style="padding-top:25px">
-                <v-flex sm12 lg9>
-                    <v-card>
-                        <v-list subheader>
-                            <v-subheader>요청 목록 및 PIN 관리</v-subheader>
-                            <v-list-tile v-for="(contact, key) in events" :key="key" avatar>
-                                <v-list-tile-avatar>
-                                    <v-icon>account_circle</v-icon>
-                                </v-list-tile-avatar>
-                                <v-list-tile-content>
-                                    <v-list-tile-title
-                                            v-html="`${contact.name}(${contact.num})${(contact.pin?`  PIN : ${contact.pin}(${new Date(contact.expires).toLocaleString()})`:'')}`"></v-list-tile-title>
-                                </v-list-tile-content>
-                                <v-list-tile-action v-if="contact.accept === 0">
-                                    <v-btn @click="accept(contact.id)" icon>
-                                        <v-icon color="green">done</v-icon>
-                                    </v-btn>
-                                </v-list-tile-action>
-                                <v-list-tile-action v-if="contact.accept === 0">
-                                    <v-btn @click="ignore(contact.id)" icon>
-                                        <v-icon color="red">clear</v-icon>
-                                    </v-btn>
-                                </v-list-tile-action>
-                                <v-list-tile-action v-if="contact.accept !== 0">
-                                    <v-text-field v-model="expires" type="datetime-local">
-                                    </v-text-field>
-                                </v-list-tile-action>
-                                <v-list-tile-action v-if="contact.accept !== 0">
-                                    <v-btn @click="edit(contact.id, contact.pin, expires)" icon>
-                                        <v-icon color="green">edit</v-icon>
-                                    </v-btn>
-                                </v-list-tile-action>
-                                <v-list-tile-action v-if="contact.accept !== 0">
-                                    <v-btn @click="delpin(contact.id, contact.pin)" icon>
-                                        <v-icon color="red">clear</v-icon>
-                                    </v-btn>
-                                </v-list-tile-action>
-                                <v-list-tile-action>
-                                    <v-btn v-bind:to="'chat/'+ contact.id" icon>
-                                        <v-icon color="primary">chat_bubble</v-icon>
-                                    </v-btn>
-                                </v-list-tile-action>
-                            </v-list-tile>
-                        </v-list>
-                    </v-card>
-                </v-flex>
-            </v-layout>
-        </section>
-    </v-app>
+  <v-app>
+    <section class="main-container">
+      <sideMenu :name="name"></sideMenu>
+      <v-layout row justify-center v-if="isLogin" style="padding-top:25px;background-color:#2682FF;">
+        <v-flex sm12 lg9>
+          <v-card>
+            <v-list subheader>
+              <v-subheader>요청 목록 및 PIN 관리</v-subheader>
+              <v-list-tile v-for="(contact, key) in events" :key="key" avatar>
+                <v-list-tile-avatar>
+                  <v-icon>account_circle</v-icon>
+                </v-list-tile-avatar>
+                <v-list-tile-content>
+                  <v-list-tile-title
+                    v-html="`${contact.name}(${contact.num})${(contact.pin?`  PIN : ${contact.pin}(${new Date(contact.expires).toLocaleString()})`:'')}`"></v-list-tile-title>
+                </v-list-tile-content>
+                <v-list-tile-action v-if="contact.accept === 0">
+                  <v-btn @click="accept(contact.id)" icon>
+                    <v-icon color="green">done</v-icon>
+                  </v-btn>
+                </v-list-tile-action>
+                <v-list-tile-action v-if="contact.accept === 0">
+                  <v-btn @click="ignore(contact.id)" icon>
+                    <v-icon color="red">clear</v-icon>
+                  </v-btn>
+                </v-list-tile-action>
+                <v-list-tile-action v-if="contact.accept !== 0">
+                  <v-text-field v-model="expires" type="datetime-local">
+                  </v-text-field>
+                </v-list-tile-action>
+                <v-list-tile-action v-if="contact.accept !== 0">
+                  <v-btn @click="edit(contact.id, contact.pin, expires)" icon>
+                    <v-icon color="green">edit</v-icon>
+                  </v-btn>
+                </v-list-tile-action>
+                <v-list-tile-action v-if="contact.accept !== 0">
+                  <v-btn @click="delpin(contact.id, contact.pin)" icon>
+                    <v-icon color="red">clear</v-icon>
+                  </v-btn>
+                </v-list-tile-action>
+                <v-list-tile-action>
+                  <v-btn v-bind:to="'chat/'+ contact.id" icon>
+                    <v-icon color="primary">chat_bubble</v-icon>
+                  </v-btn>
+                </v-list-tile-action>
+              </v-list-tile>
+            </v-list>
+          </v-card>
+        </v-flex>
+      </v-layout>
+    </section>
+  </v-app>
 </template>
 
 <script>
-  import {FullCalendar} from 'vue-full-calendar'
-  import requestmentList from '@/components/requestmentList.vue'
+  import {FullCalendar} from 'vue-full-calendar';
+  import requestmentList from './requestmentList.vue';
+  import sideMenu from './sideMenu';
 
   export default {
     name: 'Calendar',
     components: {
       FullCalendar,
-      requestmentList
+      requestmentList,
+      sideMenu
     },
     data() {
       return {
-        drawer: true,
-        items: [
-          {title: 'Home', icon: 'dashboard', to: '/'},
-          {title: 'Calendar', icon: 'date_range', to: '/calendar'}
-        ],
         right: null,
-        mini: true,
         events: [],
         session: null,
         name: this.$session.get('name'),
         isLogin: this.$session.exists(),
         expires: null
-
       }
     },
     methods: {
@@ -216,21 +175,21 @@
 </script>
 
 <style scoped>
-    @import '~fullcalendar/dist/fullcalendar.css';
+  @import '~fullcalendar/dist/fullcalendar.css';
 
-    .main-container {
-        width: 100%;
-        min-height: 100vh;
-        display: flex;
-        flex-direction: row;
-    }
+  .main-container {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: row;
+  }
 
-    .nav-container {
-        height: 100vh;
-        min-width: 6vw;
-    }
+  .nav-container {
+    height: 100vh;
+    min-width: 6vw;
+  }
 
-    section {
-        width: 50vw;
-    }
+  section {
+    width: 50vw;
+  }
 </style>
