@@ -4,25 +4,7 @@
       <sideMenu :name="name"></sideMenu>
       <section class="content" style="background-color:#2682FF;">
         <v-layout column="">
-          <v-jumbotron style="background-color:#2682FF;" v-if="!isLogin">
-            <v-container fill-height>
-              <v-layout align-center>
-                <v-flex class="fw">
-                  <section class="logo">
-                    <img src="./../assets/icon.png" alt="" srcset="">
-                    <h1>Safety PIN</h1>
-                    <span style="font-size:1.5rem">학교를 위한 보안 솔루션</span>
-                    <span class="subheading">사이트 이용을 위해 로그인을 해주세요. </span>
-                    <br>
-                    <a data-v-331f341c="" href="#/signin" class="mx-0 btn btn--large btn--router" style="color: white;">
-                      <div class="btn__content" style="border: solid;">Login</div>
-                    </a>
-                  </section>
-                </v-flex>
-              </v-layout>
-            </v-container>
-          </v-jumbotron>
-          <v-layout row justify-center v-if="isLogin" style="padding-top:25px">
+          <v-layout row justify-center style="padding-top:25px">
             <v-flex sm10 lg6>
               <v-card>
                 <v-list subheader>
@@ -79,7 +61,6 @@
         signed: this.$session.exists(),
         contacts: [],
         requests: [],
-        isLogin: false,
         name: this.$session.get('name'),
         session: this.$session.get('session'),
         st_name: '',
@@ -100,26 +81,18 @@
     },
     created() {
       if (!this.$session.exists()) this.$router.push('/signin');
-      this.isLogin = true;
-      const baseURI = 'https://letscoding.kr:8888/api/v1';
-      this.$http.post(`${baseURI}/account/t/load`, {
-        session: this.$session.get('session')
-      }).then((result) => result.data.message.forEach(v => {
-        this.contacts.push({
+      api_request.loadStudent({session: this.session}, r => {
+        r.message.forEach(v => this.contacts.push({
           name: v['st_name'],
           code: v['code'],
           num: v['st_num']
-        })
-      })).catch((err) => alert(err));
+        })).catch(err => alert(err));
+      });
     }
   }
 </script>
 
 <style scoped>
-  .fw {
-    color: white;
-  }
-
   .main-container {
     width: 100%;
     min-height: 100vh;
