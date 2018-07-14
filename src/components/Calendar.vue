@@ -2,7 +2,7 @@
   <v-app>
     <section class="main-container">
       <sideMenu :name="name"></sideMenu>
-      <v-layout row justify-center v-if="isLogin" style="padding-top:25px;background-color:#2682FF;">
+      <v-layout row justify-center style="padding-top:25px;background-color:#2682FF;">
         <v-flex sm12 lg9>
           <v-card>
             <v-list subheader>
