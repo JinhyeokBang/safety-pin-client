@@ -61,13 +61,13 @@
         right: null,
         mini: true,
         name: this.$session.get('name'),
+        session: this.$session.get('session'),
         chat: ''
       }
     },
     created() {
       if (!this.$session.exists()) this.$router.push('/signin');
-      this.session = this.getSession();
-      this.loadChat(this.session);
+      this.loadChat();
       setInterval(() => this.loadChat(), 5000);
     }
   }
