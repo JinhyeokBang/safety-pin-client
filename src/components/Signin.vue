@@ -40,8 +40,8 @@
       signin() {
         (this.email && this.password) ? api_request.signIn(this.email, this.password, result => {
           this.$session.start();
-          this.$session.set('session', result.data.message.session);
-          this.$session.set('name', result.data.message.name);
+          this.$session.set('session', result.message.session);
+          this.$session.set('name', result.message.name);
           this.$router.push('/')
         }) : alert('정보를 모두 입력 해주세요.');
       },
