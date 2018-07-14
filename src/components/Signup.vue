@@ -45,8 +45,13 @@
     },
     methods: {
       signup() {
-        if (!(this.email && this.password && this.name && this.className && this.info)) alert('정보를 모두 입력 해주세요.');
-        else api_request.signUp(this.email, this.password, this.name, this.className, this.info, () => this.$router.push('/'));
+        if (this.email && this.password && this.name && this.className && this.info) api_request.signUp(this.email, this.password, this.name, this.className, this.info, result => {
+          this.$session.start();
+          this.$session.set('session', result.data.message.session);
+          this.$session.set('name', result.data.message.name);
+          this.$router.push('/');
+        });
+        else alert('정보를 모두 입력 해주세요.');
       },
     },
     created() {
