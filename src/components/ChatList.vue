@@ -40,7 +40,7 @@
         return this.$session.get('session')
       },
       loadChat() {
-        api_request({session: this.session, id: this.$route.params.child_id}, r => this.chatMessages = r.message.chat);
+        api_request.loadStudent({session: this.session, id: this.$route.params.child_id}, r => this.chatMessages = r.message.chat);
       },
       sendChat(chat) {
         const baseURI = 'https://letscoding.kr:8888/api/v1';
