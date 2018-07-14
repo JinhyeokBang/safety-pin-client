@@ -10,10 +10,10 @@
                 <h1>Safety PIN</h1>
               </section>
               <v-card class="login-form">
-                <v-form @keyup.enter.native="signin(email, password)">
-                  <v-text-field v-model="email" label="E-mail" required></v-text-field>
+                <v-form @keyup.enter.native="signin()">
+                  <v-text-field v-model="email" label="Email" required></v-text-field>
                   <v-text-field v-model="password" label="Password" type="password" required></v-text-field>
-                  <v-btn color="info" flat @click="signin(email, password)">로그인</v-btn>
+                  <v-btn color="info" flat @click="signin()">로그인</v-btn>
                   <a href="/signup" class="signup-link">계정이 없으신가요?</a>
                 </v-form>
               </v-card>
@@ -32,27 +32,20 @@
     name: 'Signin',
     data() {
       return {
-        email: "",
-        password: "",
+        email: '',
+        password: '',
       }
     },
     methods: {
-      checkForm(email, password) {
-        return email && password;
+      signin() {
+        console.log(this.email,this.password);
+        (this.email && this.password) ? api_request.signIn(this.email, this.password, result => {
+          this.$session.start();
+          this.$session.set('session', result.data.message.session);
+          this.$session.set('name', result.data.message.name);
+          this.$router.push('/')
+        }) : alert('정보를 모두 입력 해주세요.');
       },
-      signin(email, password) {
-        if (!this.checkForm(email, password)) return false;
-        this.signinMethod();
-      },
-      signinMethod: () => api_request.signIn(this.email, this.password, result => {
-        this.$session.start();
-        this.$session.set('session', result.data.message.session,);
-        this.$session.set('name', result.data.message.name);
-        this.$router.push('/')
-      }),
-      getSession() {
-        return this.$session.get('session');
-      }
     },
     created() {
       if (this.$session.exists()) this.$router.push('/');
