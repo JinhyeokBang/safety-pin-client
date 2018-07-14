@@ -67,8 +67,10 @@
     },
     created() {
       if (!this.$session.exists()) this.$router.push('/signin');
-      this.loadChat();
-      setInterval(() => this.loadChat(), 5000);
+      else {
+        this.loadChat();
+        setInterval(() => this.loadChat(), 5000);
+      }
     }
   }
 </script>

@@ -162,7 +162,7 @@
     },
     created() {
       if (!this.$session.exists()) this.$router.push('/signin');
-      this.loadCalendar();
+      else this.loadCalendar();
       //  setInterval(() => this.loadCalendar(), 5000);
     }
   }
