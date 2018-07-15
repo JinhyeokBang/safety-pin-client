@@ -50,7 +50,7 @@
 
 <script>
   import api_request from "../js/api_request";
-  import sideMenu from './SideMenu';
+  import sideMenu from './SideMenu.vue';
   import Vue from 'vue';
 
   export default {

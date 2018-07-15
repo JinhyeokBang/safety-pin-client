@@ -56,7 +56,7 @@
 <script>
   import {FullCalendar} from 'vue-full-calendar';
   import requestmentList from './requestmentList.vue';
-  import sideMenu from './sideMenu';
+  import sideMenu from './SideMenu.vue';
 
   export default {
     name: 'Calendar',

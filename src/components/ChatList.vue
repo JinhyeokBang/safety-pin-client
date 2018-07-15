@@ -29,7 +29,7 @@
 </template>
 
 <script>
-  import sideMenu from './sideMenu'
+  import sideMenu from './SideMenu'
   import api_request from "../js/api_request";
 
   export default {
