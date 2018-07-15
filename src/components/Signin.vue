@@ -7,7 +7,7 @@
             <section>
               <section class="logo">
                 <img src="./../assets/icon.png" alt="" srcset="">
-                <h1>Safety PIN</h1>
+                <h1>SafetyPIN</h1>
               </section>
               <v-card class="login-form">
                 <v-form @keyup.enter.native="signin()">

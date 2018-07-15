@@ -8,7 +8,7 @@
               <a href="/" style="text-decoration: none">
                 <section class="logo">
                   <img src="./../assets/icon.png" alt="" srcset="">
-                  <h1>Safety PIN</h1>
+                  <h1>SafetyPIN</h1>
                 </section>
               </a>
               <v-card class="login-form">
