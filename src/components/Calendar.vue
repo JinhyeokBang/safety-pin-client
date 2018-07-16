@@ -57,6 +57,7 @@
   import {FullCalendar} from 'vue-full-calendar';
   import requestmentList from './requestmentList.vue';
   import sideMenu from './SideMenu.vue';
+  import api_request from '../js/api_request';
 
   export default {
     name: 'Calendar',
@@ -76,16 +77,8 @@
     },
     methods: {
       loadCalendar() {
-        const baseURI = 'https://letscoding.kr:8888/api/v1';
-        this.$http.post(`${baseURI}/pin/request-list`, {
-          "session": this.$session.get('session')
-        })
-          .then((result) => {
-            this.events = result.data.message;
-          })
-          .catch((err) => {
-            alert(err)
-          })
+        api_request.loadCalendar({session: this.session}, r =>
+          this.events = r.message);
       },
       getSession() {
         return this.$session.get('session')
