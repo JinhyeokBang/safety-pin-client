@@ -82,7 +82,7 @@
     created() {
       if (!this.$session.exists()) this.$router.push('/signin');
       else {
-        api_request.loadStudent({session: this.session}, r => r.message.forEach(v => this.contacts.push({
+        api_request.loadStudent({session: this.$session.get('session')}, r => r.message.forEach(v => this.contacts.push({
           name: v['st_name'],
           code: v['code'],
           num: v['st_num']
