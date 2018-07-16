@@ -77,37 +77,13 @@
     },
     methods: {
       loadCalendar() {
-        api_request.loadCalendar({session: this.session}, r =>
-          this.events = r.message);
-      },
-      getSession() {
-        return this.$session.get('session')
+        api_request.loadCalendar({session: this.session}, r => this.events = r.message);
       },
       ignore(id) {
-        const baseURI = 'https://letscoding.kr:8888/api/v1';
-        this.$http.post(`${baseURI}/pin/ignore`, {
-          "session": this.$session.get('session'),
-          "id": id
-        })
-          .then(() => {
-            window.location.reload()
-          })
-          .catch((err) => {
-            alert(err)
-          })
+        api_request.ignore({session: this.session, id}, () => window.location.reload());
       },
       delpin(id, pin) {
-        const baseURI = 'https://letscoding.kr:8888/api/v1';
-        this.$http.post(`${baseURI}/pin/delete/${pin}`, {
-          "session": this.$session.get('session'),
-          id: id
-        })
-          .then(() => {
-            window.location.reload()
-          })
-          .catch((err) => {
-            alert(err)
-          })
+        api_request.deletePin({session: this.session, id, pin}, () => window.location.reload());
       },
       edit(id, pin, expires) {
         const baseURI = 'https://letscoding.kr:8888/api/v1';
