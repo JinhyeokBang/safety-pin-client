@@ -16,10 +16,8 @@
             </v-list-tile>
           </div>
           <v-card flat style="padding:10px;">
-            <v-form @keyup.enter.native="sendChat(chat)">
-              <v-text-field v-model="chat"></v-text-field>
-              <v-btn flat color="blue" @click="sendChat(chat)">보내기</v-btn>
-            </v-form>
+            <v-text-field v-model="chat"></v-text-field>
+            <v-btn flat color="blue" @click="sendChat(chat)">보내기</v-btn>
           </v-card>
         </v-list>
 
@@ -40,13 +38,12 @@
         return this.$session.get('session')
       },
       loadChat() {
-        api_request.loadStudent({session: this.session, id: this.$route.params.child_id}, r => this.chatMessages = r.message.chat);
+        api_request.loadChat({session: this.session, id: this.$route.params.child_id}, r => {
+          this.chatMessages = r.message.chat
+        });
       },
       sendChat(chat) {
-        const baseURI = 'https://letscoding.kr:8888/api/v1';
-        this.$http.post(`${baseURI}/chat/t/send`, {session: this.session, id: this.$route.params.child_id, chat: chat})
-          .then(() => this.loadChat())
-          .catch(() => alert('채팅 전송에 오류가 발생하였습니다.'));
+        api_request.sendChat({session: this.session, id: this.$route.params.child_id, chat: chat}, () => this.loadChat());
         this.chat = "";
       },
     },
