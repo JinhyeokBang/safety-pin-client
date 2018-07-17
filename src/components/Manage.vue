@@ -44,6 +44,17 @@
             <v-flex sm12 lg9 v-else>
               <v-card>
                 <v-list subheader>
+                  <v-subheader>회원 목록</v-subheader>
+                  <v-list-tile v-for="(ac, key) in accounts" :key="key" avatar>
+                    <v-list-tile-content>
+                      <v-list-tile-title
+                        v-html="`<span style='font-weight: 900;'>${ac.level===1?'학부모':ac.level===100?'교사':'보안 관리자'}</span> : ${ac.email}(이름 : ${ac.name})`"></v-list-tile-title>
+                    </v-list-tile-content>
+                  </v-list-tile>
+                </v-list>
+              </v-card>
+              <v-card>
+                <v-list subheader>
                   <v-subheader>로그 관리</v-subheader>
                   <v-list-tile v-for="(log, key) in logs" :key="key" avatar>
                     <v-list-tile-content>
@@ -53,11 +64,7 @@
                   </v-list-tile>
                 </v-list>
               </v-card>
-              <v-card>
-                <v-list subheader>
-                  <v-subheader>회원 목록</v-subheader>
-                </v-list>
-              </v-card>
+
             </v-flex>
           </v-layout>
         </v-layout>
@@ -76,7 +83,7 @@
     components: {sideMenu},
     data() {
       return {
-        contacts: [],
+        accounts: [],
         name: this.$session.get('name'),
         session: this.$session.get('session'),
         manager: this.$session.get('manager'),
@@ -97,7 +104,7 @@
       replaceMessage(message) {
         const bold = `<span style="font-weight: 900;">`;
         const end = `</span>`;
-        const replace = [['Login', '로그인'], ['Register', '회원가입'], ['My_pin', 'PIN 조회'], ['Child_Add', '자녀 등록'], ['Delete_Pin', 'PIN 제거'], ['Load_chat', '채팅 로드']];
+        const replace = [['Login', '로그인'], ['Register', '회원가입'], ['My_pin', 'PIN 조회'], ['Child_Add', '자녀 등록'], ['Delete_Pin', 'PIN 제거'], ['Load_chat', '채팅 로드'], ['Load_calender', '요청 조회'], ['Delete_pin', 'PIN 제거']];
         replace.forEach(v => message = message.replace(v[0], bold + v[1] + end));
         return message.replace('Request ', '요청').replace('Failed', '실패한');
       }
@@ -107,6 +114,10 @@
       else {
         if (this.manager) {
           api_request.loadLogs({session: this.$session.get('session')}, r => r.message.forEach(v => this.logs.push(v)));
+          api_request.loadAccounts({session: this.$session.get('session')}, r => {
+            console.log(r.message);
+            r.message.forEach(v => this.accounts.push(v));
+          });
         }
       }
     }

@@ -17,6 +17,7 @@ export default {
   loadCalendar: (data, cb) => pRequest('/pin/request-list', data, cb, () => alert('요청을 불러오는데 실패했습니다.')),
   loadPin: (data, cb) => pRequest('/manage/pin-list', data, cb, () => alert('PIN 목록을 불러오는데 실패했습니다.')),
   loadLogs: (data, cb) => pRequest('/manage/logs', data, cb, () => alert('로그를 불러오는데 실패했습니다.')),
+  loadAccounts: (data, cb) => pRequest('/manage/accounts', data, cb, () => alert('회원 목록을 불러오는데 실패했습니다.')),
   ignore: (data, cb) => pRequest('/pin/ignore', data, cb, () => alert('요청을 삭제하는데 실패했습니다.')),
   deletePin: (data, cb) => pRequest(`/pin/delete/${data.pin}`, {id: data.id, session: data.session}, cb, () => alert('요청을 삭제하는데 실패했습니다.')),
   editPin: (data, cb) => pRequest(`/pin/edit`, data, cb, () => alert('요청을 수정하는데 실패했습니다.')),
