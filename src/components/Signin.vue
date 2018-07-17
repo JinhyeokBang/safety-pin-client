@@ -13,7 +13,8 @@
                 <v-form @keyup.enter.native="signin()">
                   <v-text-field v-model="email" label="Email" required></v-text-field>
                   <v-text-field v-model="password" label="Password" type="password" required></v-text-field>
-                  <v-btn color="info" flat @click="signin()">로그인</v-btn>
+                  <v-btn style="display:inline-block" color="info" flat @click="signin(true)">로그인</v-btn>
+                  <v-btn style="display:inline-block" color="info" flat @click="signin(false)">보안 관리자로 로그인</v-btn>
                   <a href="/signup" class="signup-link">계정이 없으신가요?</a>
                 </v-form>
               </v-card>
@@ -37,13 +38,28 @@
       }
     },
     methods: {
-      signin() {
-        (this.email && this.password) ? api_request.signIn(this.email, this.password, result => {
-          this.$session.start();
-          this.$session.set('session', result.message.session);
-          this.$session.set('name', result.message.name);
-          this.$router.push('/')
-        }) : alert('정보를 모두 입력 해주세요.');
+      signin(isManager) {
+        if (this.email && this.password) {
+          if (isManager) {
+            api_request.signIn(this.email, this.password, result => {
+              this.$session.start();
+              this.$session.set('session', result.message.session);
+              this.$session.set('name', result.message.name);
+              this.$session.set('manager', false);
+              this.$router.push('/')
+            });
+          } else {
+            api_request.signInM(this.email, this.password, result => {
+              this.$session.start();
+              this.$session.set('session', result.message.session);
+              this.$session.set('name', result.message.name);
+              this.$session.set('manager', trues);
+              this.$router.push('/')
+            });
+          }
+        } else {
+          alert('정보를 모두 입력 해주세요.');
+        }
       },
     },
     created() {
