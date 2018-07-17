@@ -14,7 +14,7 @@
                   <v-text-field v-model="email" label="Email" required></v-text-field>
                   <v-text-field v-model="password" label="Password" type="password" required></v-text-field>
                   <v-btn color="info" flat @click="signin()">로그인</v-btn>
-                  <a href="#/signup" class="signup-link">계정이 없으신가요?</a>
+                  <a href="./signup" class="signup-link">계정이 없으신가요?</a>
                 </v-form>
               </v-card>
             </section>

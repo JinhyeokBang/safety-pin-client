@@ -12,7 +12,7 @@
       </v-toolbar>
       <v-list class="pt-0" dense>
         <v-divider></v-divider>
-        <v-list-tile v-for="item in items" :key="item.title" :to=" (item.to === '/calendar'&& manager)?'#/manage':item.to  ">
+        <v-list-tile v-for="item in items" :key="item.title" :to=" (item.to === './calendar'&& manager)?'./manage':item.to  ">
           <v-list-tile-action>
             <v-btn icon>
               <v-icon>{{(item.icon === 'date_range'&& manager)?'assessment':item.icon }}</v-icon>
@@ -47,7 +47,7 @@
         drawer: true,
         manager: this.$session.get('manager'),
         items: [{title: 'Home', icon: 'dashboard', to: '/'},
-          {title: 'Calendar', icon: 'date_range', to: '#/calendar'}]
+          {title: 'Calendar', icon: 'date_range', to: './calendar'}]
       }
     },
     methods: {
