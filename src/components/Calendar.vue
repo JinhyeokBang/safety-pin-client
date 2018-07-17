@@ -13,10 +13,10 @@
                 </v-list-tile-avatar>
                 <v-list-tile-content>
                   <v-list-tile-title
-                    v-html="`${contact.name}(${contact.num})${(contact.pin?`  PIN : ${contact.pin}(${new Date(contact.expires).toLocaleString()})`:'')}`"></v-list-tile-title>
+                    v-html="`${contact.name}(${contact.num})${(contact.pin?`  PIN : ${contact.pin}(${new Date(contact.expires).toLocaleString()})`:' 만남 요청 일자 : '+ new Date(contact.timestp).toLocaleDateString())}`"></v-list-tile-title>
                 </v-list-tile-content>
                 <v-list-tile-action v-if="contact.accept === 0">
-                  <v-btn @click="accept(contact.id)" icon>
+                  <v-btn @click="accept(contact.id, contact.expires)" icon>
                     <v-icon color="green">done</v-icon>
                   </v-btn>
                 </v-list-tile-action>
@@ -26,11 +26,11 @@
                   </v-btn>
                 </v-list-tile-action>
                 <v-list-tile-action v-if="contact.accept !== 0">
-                  <v-text-field v-model="expires" type="datetime-local">
+                  <v-text-field v-model="expires[contact.id]" type="datetime-local" style="padding: 0;">
                   </v-text-field>
                 </v-list-tile-action>
                 <v-list-tile-action v-if="contact.accept !== 0">
-                  <v-btn @click="edit(contact.id, contact.pin, expires)" icon>
+                  <v-btn @click="edit(contact.id, contact.pin)" icon>
                     <v-icon color="green">edit</v-icon>
                   </v-btn>
                 </v-list-tile-action>
@@ -39,7 +39,7 @@
                     <v-icon color="red">clear</v-icon>
                   </v-btn>
                 </v-list-tile-action>
-                <v-list-tile-action>
+                <v-list-tile-action v-if="contact.accept !== 0">
                   <v-btn v-bind:to="'chat/'+ contact.id" icon>
                     <v-icon color="primary">chat_bubble</v-icon>
                   </v-btn>
@@ -72,12 +72,24 @@
         events: [],
         session: this.$session.get('session'),
         name: this.$session.get('name'),
-        expires: null
+        expires: {}
       }
     },
     methods: {
       loadCalendar() {
-        api_request.loadCalendar({session: this.session}, r => this.events = r.message);
+        api_request.loadCalendar({session: this.session}, r => {
+          this.events = r.message;
+          const data = {};
+          this.events.forEach(v => {
+            if (Object.keys(v).includes('timestp')) {
+              const date =new Date(v.timestp);
+              date.setHours(date.getHours() + 9);
+              data[v.id] = (date).toISOString().substring(0, 16);
+            }
+          });
+          this.expires = data;
+          console.log(this.expires);
+        });
       },
       ignore(id) {
         api_request.ignore({session: this.session, id}, () => window.location.reload());
@@ -85,47 +97,13 @@
       delpin(id, pin) {
         api_request.deletePin({session: this.session, id, pin}, () => window.location.reload());
       },
-      edit(id, pin, expires) {
-        const baseURI = 'https://letscoding.kr:8888/api/v1';
-        this.$http.post(`${baseURI}/pin/edit/${pin}`, {
-          "session": this.$session.get('session'),
-          expires: expires.toLocaleString()
-        })
-          .then(() => {
-            window.location.reload()
-          })
-          .catch((err) => {
-            alert(err)
-          })
+      edit(pin, expires) {
+        api_request.editPin({session: this.session, pin, expires: expires[id].toLocaleString()}, () => window.location.reload());
       },
-      accept(id) {
-        const baseURI = 'https://letscoding.kr:8888/api/v1';
-        this.$http.post(`${baseURI}/pin/accept`, {
-          "session": this.$session.get('session'),
-          "id": id
-        }).then(() => {
-          const baseURI = 'https://letscoding.kr:8888/api/v1';
-          this.$http.post(`${baseURI}/pin/create`, {
-            "session": this.$session.get('session'),
-            "id": id
-          })
-            .then((result) => {
-              const list = this.events;
-              Object.keys(this.events).forEach(v => {
-                if (this.events[v].id === id) {
-                  list[v].pin = result.pin;
-                  list[v].expries = result.expires;
-                }
-                this.events = list;
-              });
-              window.location.reload()
-            })
-            .catch((err) => {
-              alert(err)
-            })
-        }).catch((err) => {
-          alert(err)
-        })
+      accept(id, expires) {
+        api_request.acceptPin({session: this.session, id}, () => api_request.createPin({
+          session: this.session, id, expires
+        }, () => window.location.reload()));
       },
 
     },
