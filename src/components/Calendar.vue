@@ -40,7 +40,7 @@
                   </v-btn>
                 </v-list-tile-action>
                 <v-list-tile-action v-if="contact.accept !== 0">
-                  <v-btn v-bind:to="'chat/'+ contact.id" icon>
+                  <v-btn v-bind:to="'/#/chat/'+ contact.id" icon>
                     <v-icon color="primary">chat_bubble</v-icon>
                   </v-btn>
                 </v-list-tile-action>
@@ -110,7 +110,7 @@
     created() {
       if (!this.$session.exists()) this.$router.push('/signin');
       else this.loadCalendar();
-      //  setInterval(() => this.loadCalendar(), 5000);
+      setInterval(() => this.loadCalendar(), 5000);
     }
   }
 </script>
