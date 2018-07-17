@@ -44,6 +44,25 @@
             <v-flex sm12 lg9 v-else>
               <v-card>
                 <v-list subheader>
+                  <v-subheader>PIN 관리</v-subheader>
+                  <v-list-tile v-for="(contact, key) in events" :key="key" avatar>
+                    <v-list-tile-avatar>
+                      <v-icon>account_circle</v-icon>
+                    </v-list-tile-avatar>
+                    <v-list-tile-content>
+                      <v-list-tile-title
+                        v-html="`${contact.st_name}(${contact.st_num})${(contact.pin?`  PIN : ${contact.pin}(${new Date(contact.expires).toLocaleString()})`:'')}`"></v-list-tile-title>
+                    </v-list-tile-content>
+                    <v-list-tile-action v-if="contact.accept !== 0">
+                      <v-btn @click="delpin(contact.id, contact.pin)" icon>
+                        <v-icon color="red">clear</v-icon>
+                      </v-btn>
+                    </v-list-tile-action>
+                  </v-list-tile>
+                </v-list>
+              </v-card>
+              <v-card>
+                <v-list subheader>
                   <v-subheader>연락처</v-subheader>
                   <v-list-tile v-for="(contact, key) in contacts" :key="key" avatar>
                     <v-list-tile-avatar>
@@ -80,6 +99,7 @@
         name: this.$session.get('name'),
         session: this.$session.get('session'),
         manager: this.$session.get('manager'),
+        events: [],
         st_name: '',
         st_num: ''
       }
@@ -99,16 +119,31 @@
     created() {
       if (!this.$session.exists()) this.$router.push('/signin');
       else {
-        if (this.manager) api_request.loadStudentM({session: this.$session.get('session')}, r => r.message.forEach(v => {
-          this.contacts.push({
-            name: v['st_name'],
-            code: v['code'],
-            num: v['st_num'],
-            t_name: v['t_name'],
-            t_email: v['t_email'],
-            t_class: v['t_class'],
-          })
-        }));
+        if (this.manager) {
+          api_request.loadStudentM({session: this.$session.get('session')}, r => r.message.forEach(v => {
+            this.contacts.push({
+              name: v['st_name'],
+              code: v['code'],
+              num: v['st_num'],
+              t_name: v['t_name'],
+              t_email: v['t_email'],
+              t_class: v['t_class'],
+            })
+          }));
+          api_request.loadPin({session: this.session}, r => {
+            this.events = r.message;
+            const data = {};
+            this.events.forEach(v => {
+              if (Object.keys(v).includes('timestp')) {
+                const date = new Date(v.timestp);
+                date.setHours(date.getHours() + 9);
+                data[v.id] = (date).toISOString().substring(0, 16);
+              }
+            });
+            this.expires = data;
+            console.log(this.expires);
+          });
+        }
 
         else api_request.loadStudent({session: this.$session.get('session')}, r => r.message.forEach(v => this.contacts.push({
           name: v['st_name'],
