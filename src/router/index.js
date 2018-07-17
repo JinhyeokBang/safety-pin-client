@@ -6,16 +6,20 @@ import Signup from '@/components/Signup'
 import Calendar from '@/components/Calendar'
 import ChatList from '@/components/ChatList'
 import PageNotFound from '@/components/PageNotFound'
+import Manage from '@/components/Manage'
 
 Vue.use(Router)
 
 export default new Router({
-  mode: 'history',
   routes: [
     {
       path: '/',
       name: 'index',
       component: Index
+    },{
+      path: '/manage',
+      name: 'Manage',
+      component: Manage
     },
     {
       path: '/signin',
