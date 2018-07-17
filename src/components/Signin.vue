@@ -53,7 +53,7 @@
               this.$session.start();
               this.$session.set('session', result.message.session);
               this.$session.set('name', result.message.name);
-              this.$session.set('manager', trues);
+              this.$session.set('manager', true);
               this.$router.push('/')
             });
           }

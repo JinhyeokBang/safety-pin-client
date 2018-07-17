@@ -5,7 +5,7 @@
       <section class="content" style="background-color:#2682FF;">
         <v-layout column="">
           <v-layout row justify-center style="padding-top:25px">
-            <v-flex sm10 lg6>
+            <v-flex sm10 lg6 v-if="!manager">
               <v-card>
                 <v-list subheader>
                   <v-subheader>연락처</v-subheader>
@@ -41,6 +41,22 @@
                 </v-list>
               </v-card>
             </v-flex>
+            <v-flex sm12 lg9 v-else>
+              <v-card>
+                <v-list subheader>
+                  <v-subheader>연락처</v-subheader>
+                  <v-list-tile v-for="(contact, key) in contacts" :key="key" avatar>
+                    <v-list-tile-avatar>
+                      <v-icon>account_circle</v-icon>
+                    </v-list-tile-avatar>
+                    <v-list-tile-content>
+                      <v-list-tile-title
+                        v-html="`${contact.name}(${contact.num})  학생코드 : ${contact.code}  담당선생님 : ${contact.t_class} ${contact.t_name}(${contact.t_email})`"></v-list-tile-title>
+                    </v-list-tile-content>
+                  </v-list-tile>
+                </v-list>
+              </v-card>
+            </v-flex>
           </v-layout>
         </v-layout>
       </section>
@@ -63,6 +79,7 @@
         requests: [],
         name: this.$session.get('name'),
         session: this.$session.get('session'),
+        manager: this.$session.get('manager'),
         st_name: '',
         st_num: ''
       }
@@ -82,7 +99,18 @@
     created() {
       if (!this.$session.exists()) this.$router.push('/signin');
       else {
-        api_request.loadStudent({session: this.$session.get('session')}, r => r.message.forEach(v => this.contacts.push({
+        if (this.manager) api_request.loadStudentM({session: this.$session.get('session')}, r => r.message.forEach(v => {
+          this.contacts.push({
+            name: v['st_name'],
+            code: v['code'],
+            num: v['st_num'],
+            t_name: v['t_name'],
+            t_email: v['t_email'],
+            t_class: v['t_class'],
+          })
+        }));
+
+        else api_request.loadStudent({session: this.$session.get('session')}, r => r.message.forEach(v => this.contacts.push({
           name: v['st_name'],
           code: v['code'],
           num: v['st_num']

@@ -11,6 +11,7 @@ export default {
   }, cb, () => alert('회원가입에 실패하였습니다.')),
   addStudent: (data, cb) => pRequest('/manage/student', data, cb, () => alert('학생을 추가하는데 실패했습니다.')),
   loadStudent: (data, cb) => pRequest('/account/t/load', data, cb, () => alert('학생목록을 불러오는데 실패했습니다.')),
+  loadStudentM: (data, cb) => pRequest('/manage/load', data, cb, () => alert('학생목록을 불러오는데 실패했습니다.')),
   loadChat: (data, cb) => pRequest('/chat/t/load', data, cb, () => alert('채팅목록을 불러오는데 실패했습니다.')),
   sendChat: (data, cb) => pRequest('/chat/t/send', data, cb, () => alert('채팅 전송에 실패했습니다.')),
   loadCalendar: (data, cb) => pRequest('/pin/request-list', data, cb, () => alert('요청을 불러오는데 실패했습니다.')),
