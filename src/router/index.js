@@ -7,6 +7,7 @@ import Calendar from '@/components/Calendar'
 import ChatList from '@/components/ChatList'
 import PageNotFound from '@/components/PageNotFound'
 import Manage from '@/components/Manage'
+import How from '@/components/How'
 
 Vue.use(Router)
 
@@ -16,6 +17,10 @@ export default new Router({
       path: '/',
       name: 'index',
       component: Index
+    },{
+      path: '/how',
+      name: 'How',
+      component: How
     },{
       path: '/manage',
       name: 'Manage',

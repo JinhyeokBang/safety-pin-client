@@ -55,7 +55,7 @@
                     </v-list-tile-content>
                     <v-list-tile-action v-if="contact.accept !== 0">
                       <v-btn @click="delpin(contact.id, contact.pin)" icon>
-                        <v-icon color="red">clear</v-icon>
+                        <v-icon color="green">done</v-icon>
                       </v-btn>
                     </v-list-tile-action>
                   </v-list-tile>
@@ -105,6 +105,9 @@
       }
     },
     methods: {
+      delpin(id, pin) {
+        api_request.deletePin({session: this.session, id, pin}, () => window.location.reload());
+      },
       student_add() {
         if (this.st_name && this.st_num) api_request.addStudent({
           session: this.session, name: this.st_name, number: this.st_num

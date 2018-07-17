@@ -16,7 +16,7 @@
                     v-html="`${contact.name}(${contact.num})${(contact.pin?`  PIN : ${contact.pin}(${new Date(contact.expires).toLocaleString()})`:' 만남 요청 일자 : '+ new Date(contact.timestp).toLocaleDateString())}`"></v-list-tile-title>
                 </v-list-tile-content>
                 <v-list-tile-action v-if="contact.accept === 0">
-                  <v-btn @click="accept(contact.id, contact.expires)" icon>
+                  <v-btn @click="accept(contact.id, contact.timestp)" icon>
                     <v-icon color="green">done</v-icon>
                   </v-btn>
                 </v-list-tile-action>
@@ -82,13 +82,12 @@
           const data = {};
           this.events.forEach(v => {
             if (Object.keys(v).includes('timestp')) {
-              const date =new Date(v.timestp);
+              const date = new Date(v.timestp);
               date.setHours(date.getHours() + 9);
               data[v.id] = (date).toISOString().substring(0, 16);
             }
           });
           this.expires = data;
-          console.log(this.expires);
         });
       },
       ignore(id) {
@@ -97,10 +96,13 @@
       delpin(id, pin) {
         api_request.deletePin({session: this.session, id, pin}, () => window.location.reload());
       },
-      edit(pin, expires) {
-        api_request.editPin({session: this.session, pin, expires: expires[id].toLocaleString()}, () => window.location.reload());
+      edit(id, pin) {
+        api_request.editPin({
+          session: this.session, pin, id, expires: new Date(this.expires[id]).getTime()
+        }, () => window.location.reload());
       },
       accept(id, expires) {
+        console.log(expires);
         api_request.acceptPin({session: this.session, id}, () => api_request.createPin({
           session: this.session, id, expires
         }, () => window.location.reload()));
