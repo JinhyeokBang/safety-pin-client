@@ -11,7 +11,7 @@ export default {
   addStudent: (data, cb) => pRequest('/manage/student', data, cb, () => alert('학생을 추가하는데 실패했습니다.')),
   loadStudent: (data, cb) => pRequest('/account/t/load', data, cb, () => alert('학생목록을 불러오는데 실패했습니다.')),
   loadChat: (data, cb) => pRequest('/chat/t/load', data, cb, () => alert('채팅목록을 불러오는데 실패했습니다.')),
-  sendChat: (data, cb) => pRequest('/chat/t/send', data, cb, () => alert('채팅을 전송하는데 실패했습니다.')),
+  sendChat: (data, cb) => pRequest('/chat/t/send', data, cb, () => alert('채팅 전송에 실패했습니다.')),
   loadCalendar: (data, cb) => pRequest('/pin/request-list', data, cb, () => alert('요청을 불러오는데 실패했습니다.')),
   ignore: (data, cb) => pRequest('/pin/ignore', data, cb, () => alert('요청을 삭제하는데 실패했습니다.')),
   deletePin: (data, cb) => pRequest(`/pin/delete/${data.pin}`, {id: data.id, session: data.session}, cb, () => alert('요청을 삭제하는데 실패했습니다.')),
