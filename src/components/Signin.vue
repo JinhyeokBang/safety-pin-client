@@ -13,9 +13,13 @@
                 <v-form @keyup.enter.native="signin()">
                   <v-text-field v-model="email" label="Email" required></v-text-field>
                   <v-text-field v-model="password" label="Password" type="password" required></v-text-field>
-                  <v-btn style="display:inline-block" color="info" flat @click="signin(true)">로그인</v-btn>
-                  <v-btn style="display:inline-block" color="info" flat @click="signin(false)">보안 관리자로 로그인</v-btn>
-                  <a href="/signup" class="signup-link">계정이 없으신가요?</a>
+                  <v-layout align-center justify-center>
+                    <v-flex>
+                      <v-btn color="info" flat @click="signin(true)">로그인</v-btn>
+                      <v-btn color="error" @click="signin(false)">보안 관리자로 로그인</v-btn>
+                    </v-flex>
+                  </v-layout>
+                  <a href="#/signup" class="signup-link">계정이 없으신가요?</a>
                 </v-form>
               </v-card>
             </section>
@@ -110,13 +114,12 @@
     justify-content: center;
     align-items: center;
   }
-
   .signup-link {
+    margin-top: 10px;
     font-size: 0.8rem;
     text-decoration: none;
     color: #444444;
   }
-
   @media screen and (max-width: 420px) {
 
   }
