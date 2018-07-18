@@ -3,11 +3,11 @@ import Router from 'vue-router'
 import Index from '@/components/Index'
 import Signin from '@/components/Signin'
 import Signup from '@/components/Signup'
-import Profile from '@/components/Profile'
-import MyProfile from '@/components/MyProfile'
 import Calendar from '@/components/Calendar'
 import ChatList from '@/components/ChatList'
 import PageNotFound from '@/components/PageNotFound'
+import Manage from '@/components/Manage'
+import How from '@/components/How'
 
 Vue.use(Router)
 
@@ -17,21 +17,19 @@ export default new Router({
       path: '/',
       name: 'index',
       component: Index
+    },{
+      path: '/how',
+      name: 'How',
+      component: How
+    },{
+      path: '/manage',
+      name: 'Manage',
+      component: Manage
     },
     {
       path: '/signin',
       name: 'Signin',
       component: Signin
-    },
-    {
-      path: '/profile',
-      name: 'Profile',
-      component: Profile
-    },
-    {
-      path: '/myprofile',
-      name: 'MyProfile',
-      component: MyProfile
     },
     {
       path: '/signup',

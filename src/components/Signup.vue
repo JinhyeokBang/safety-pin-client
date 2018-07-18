@@ -3,23 +3,22 @@
     <v-content>
       <v-container fluid fill-height class="form-container">
         <v-layout align-center justify-center>
-          <v-flex xs12 sm6 md3>
+          <v-flex xs12 sm6 md5 lg3>
             <section>
-              <section class="logo">
-                <img src="./../assets/icon.png" alt="" srcset="">
-                <h1>Safety PIN</h1>
-              </section>
+              <a href="/" style="text-decoration: none">
+                <section class="logo">
+                  <img src="./../assets/icon.png" alt="" srcset="">
+                  <h1>SafetyPIN</h1>
+                </section>
+              </a>
               <v-card class="login-form">
-                <!-- <input type="email" v-model="email" id="signinEmail" placeholder="아이디"/> -->
-                <!-- <input type="password" v-model="password" id="signinPassword" placeholder="비밀번호"/> -->
                 <v-form>
-                  <v-btn color="primary" flat @click="backButtonClicked()">뒤로가기</v-btn>
                   <v-text-field v-model="name" label="이름" required></v-text-field>
-                  <v-text-field v-model="classNumber" label="반" required></v-text-field>
+                  <v-text-field v-model="className" label="반" required maxlength="6"></v-text-field>
                   <v-text-field v-model="info" label="소개" required></v-text-field>
-                  <v-text-field v-model="email" label="E-mail" required></v-text-field>                  
+                  <v-text-field v-model="email" label="E-mail" type="email" required></v-text-field>
                   <v-text-field v-model="password" label="Password" type="password" required></v-text-field>
-                  <v-btn color="info" flat @click="signup(email, password, classNumber, info)">회원가입</v-btn>
+                  <v-btn color="info" flat @click="signup()">회원가입</v-btn>
                 </v-form>
               </v-card>
             </section>
@@ -31,73 +30,49 @@
 </template>
 
 <script>
-export default {
-  name: 'Signup',
-  data() {
-    return {
-      email: "",
-      password: "",
-      name: "",
-      classNumber: "",
-      info: ""
-    }
-  },
-  methods: {
-    checkForm(email, password) {
-      if (email && password)
-        return true
-      return false
-    },
-    signup(email, password, classNumber, info) {
-      if(!this.checkForm(email, password))
-        return false
+  import api_request from '../js/api_request'
 
-      this.signupSuccessed(this.session, email, password, classNumber, info)
+  export default {
+    name: 'Signup',
+    data() {
+      return {
+        email: '',
+        password: '',
+        name: '',
+        className: '',
+        info: ''
+      }
     },
-    signupSuccessed(session) {
-      this.$session.start()
-      this.$session.set('session', session)
-      this.$router.push('/')
+    methods: {
+      signup() {
+        if (this.email && this.password && this.name && this.className && this.info) api_request.signUp(this.email, this.password, this.name, this.className, this.info, result => {
+          this.$session.start();
+          this.$session.set('session', result.message.session);
+          this.$session.set('name', result.message.name);
+          this.$router.push('/');
+        });
+        else alert('정보를 모두 입력 해주세요.');
+      },
     },
-    backButtonClicked() {
-      this.$router.push('/')
-    },
-    signupMethod(session, email, password, classNumber, info) {
-      const baseURI = 'https://letscoding.kr:8888/api/v1'
-      this.$http.post(`${baseURI}/account/t/register`, {
-        session: this.session,
-        email: this.email,
-        password: this.password,
-        class: this.classNumber,
-        info: this.info
-      })
-      .then((result) => {
-        signupSuccessed(result.data.message.session)
-      })
-      .catch((err) => {
-        
-      })
-    },
-    getSession () {
-      return this.$session.get('session')
+    created() {
+      if (this.$session.exists()) this.$router.push('/');
     }
-  },
-  created() {
-    if (this.$session.exists())
-      this.$router.push('/SignoutPlease')
-    this.session = this.getSession()
   }
-}
 </script>
 
 <style scoped>
-  *{
+  * {
     font-family: 'Nanum Gothic', sans-serif;
   }
-  .form-container{  
-    background-color:#2682FF;
+
+  html {
   }
-  .logo{
+
+  .form-container {
+    background-color: #2682FF;
+  }
+
+  .logo {
     height: 220px;
     display: flex;
     flex-direction: column;
@@ -105,21 +80,25 @@ export default {
     align-items: center;
     text-align: center;
   }
-  .logo img{
+
+  .logo img {
     width: 120px;
   }
-  .logo h1{
-    color: #fff;  
+
+  .logo h1 {
+    color: #fff;
     font-family: 'Open Sans', sans-serif;
     font-size: 2rem;
     font-weight: 300;
   }
-  .login-form{ 
-    padding: 15px; 
+
+  .login-form {
+    padding: 15px;
     background-color: #fff;
     color: #2682FF;
   }
-  form{
+
+  form {
     display: flex;
     flex-direction: column;
     justify-content: center;

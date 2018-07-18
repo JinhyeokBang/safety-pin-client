@@ -44,37 +44,27 @@
             <v-flex sm12 lg9 v-else>
               <v-card>
                 <v-list subheader>
-                  <v-subheader>PIN 관리</v-subheader>
-                  <v-list-tile v-for="(contact, key) in events" :key="key" avatar>
-                    <v-list-tile-avatar>
-                      <v-icon>account_circle</v-icon>
-                    </v-list-tile-avatar>
+                  <v-subheader>회원 목록</v-subheader>
+                  <v-list-tile v-for="(ac, key) in accounts" :key="key" avatar>
                     <v-list-tile-content>
                       <v-list-tile-title
-                        v-html="`${contact.st_name}(${contact.st_num})${(contact.pin?`  PIN : ${contact.pin}(${new Date(contact.expires).toLocaleString()})`:'')}`"></v-list-tile-title>
+                        v-html="`<span style='font-weight: 900;'>${ac.level===1?'학부모':ac.level===100?'교사':'보안 관리자'}</span> : ${ac.email}(이름 : ${ac.name})`"></v-list-tile-title>
                     </v-list-tile-content>
-                    <v-list-tile-action v-if="contact.accept !== 0">
-                      <v-btn @click="delpin(contact.id, contact.pin)" icon>
-                        <v-icon color="green">done</v-icon>
-                      </v-btn>
-                    </v-list-tile-action>
                   </v-list-tile>
                 </v-list>
               </v-card>
               <v-card>
                 <v-list subheader>
-                  <v-subheader>연락처</v-subheader>
-                  <v-list-tile v-for="(contact, key) in contacts" :key="key" avatar>
-                    <v-list-tile-avatar>
-                      <v-icon>account_circle</v-icon>
-                    </v-list-tile-avatar>
+                  <v-subheader>로그 관리</v-subheader>
+                  <v-list-tile v-for="(log, key) in logs" :key="key" avatar>
                     <v-list-tile-content>
                       <v-list-tile-title
-                        v-html="`${contact.name}(${contact.num})  학생코드 : ${contact.code}  담당선생님 : ${contact.t_class} ${contact.t_name}(${contact.t_email})`"></v-list-tile-title>
+                        v-html="`${new Date(log.timestp).toLocaleString()}에 ${replaceMessage(log.message.split('from ')[0])+'이 발생하였습니다. IP 주소는 '+log.message.split('from ')[1]}`"></v-list-tile-title>
                     </v-list-tile-content>
                   </v-list-tile>
                 </v-list>
               </v-card>
+
             </v-flex>
           </v-layout>
         </v-layout>
@@ -89,25 +79,18 @@
   import Vue from 'vue';
 
   export default {
-    name: 'Index',
+    name: 'Manage',
     components: {sideMenu},
     data() {
       return {
-        signed: this.$session.exists(),
-        contacts: [],
-        requests: [],
+        accounts: [],
         name: this.$session.get('name'),
         session: this.$session.get('session'),
         manager: this.$session.get('manager'),
-        events: [],
-        st_name: '',
-        st_num: ''
+        logs: [],
       }
     },
     methods: {
-      delpin(id, pin) {
-        api_request.deletePinM({session: this.session, id, pin}, () => window.location.reload());
-      },
       student_add() {
         if (this.st_name && this.st_num) api_request.addStudent({
           session: this.session, name: this.st_name, number: this.st_num
@@ -118,41 +101,24 @@
         }));
         else alert('학번과 이름을 모두 입력해주세요.');
       },
+      replaceMessage(message) {
+        const bold = `<span style="font-weight: 900;">`;
+        const end = `</span>`;
+        const replace = [['Login', '로그인'], ['Register', '회원가입'], ['My_pin', 'PIN 조회'], ['Child_Add', '자녀 등록'], ['Delete_Pin', 'PIN 제거'], ['Load_chat', '채팅 로드'], ['Load_calender', '요청 조회'], ['Delete_pin', 'PIN 제거']];
+        replace.forEach(v => message = message.replace(v[0], bold + v[1] + end));
+        return message.replace('Request ', '요청').replace('Failed', '실패한');
+      }
     },
     created() {
-      if (!this.$session.exists()) this.$router.push('/signin');
+      if (!this.$session.exists() || !this.manager) this.$router.push('/signin');
       else {
         if (this.manager) {
-          api_request.loadStudentM({session: this.$session.get('session')}, r => r.message.forEach(v => {
-            this.contacts.push({
-              name: v['st_name'],
-              code: v['code'],
-              num: v['st_num'],
-              t_name: v['t_name'],
-              t_email: v['t_email'],
-              t_class: v['t_class'],
-            })
-          }));
-          api_request.loadPin({session: this.session}, r => {
-            this.events = r.message;
-            const data = {};
-            this.events.forEach(v => {
-              if (Object.keys(v).includes('timestp')) {
-                const date = new Date(v.timestp);
-                date.setHours(date.getHours() + 9);
-                data[v.id] = (date).toISOString().substring(0, 16);
-              }
-            });
-            this.expires = data;
-            console.log(this.expires);
+          api_request.loadLogs({session: this.$session.get('session')}, r => r.message.forEach(v => this.logs.push(v)));
+          api_request.loadAccounts({session: this.$session.get('session')}, r => {
+            console.log(r.message);
+            r.message.forEach(v => this.accounts.push(v));
           });
         }
-
-        else api_request.loadStudent({session: this.$session.get('session')}, r => r.message.forEach(v => this.contacts.push({
-          name: v['st_name'],
-          code: v['code'],
-          num: v['st_num']
-        })));
       }
     }
   }
@@ -174,21 +140,7 @@
     font-weight: 300;
   }
 
-  .logo {
-    height: 220px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-  }
-
   .logo img {
     width: 120px;
-  }
-
-  .nav-container {
-    height: 100vh;
-
   }
 </style>
