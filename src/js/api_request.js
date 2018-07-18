@@ -20,6 +20,7 @@ export default {
   loadAccounts: (data, cb) => pRequest('/manage/accounts', data, cb, () => alert('회원 목록을 불러오는데 실패했습니다.')),
   ignore: (data, cb) => pRequest('/pin/ignore', data, cb, () => alert('요청을 삭제하는데 실패했습니다.')),
   deletePin: (data, cb) => pRequest(`/pin/delete/${data.pin}`, {id: data.id, session: data.session}, cb, () => alert('요청을 삭제하는데 실패했습니다.')),
+  deletePinM: (data, cb) => pRequest(`/manage/delete`, data, cb, () => alert('요청을 삭제하는데 실패했습니다.')),
   editPin: (data, cb) => pRequest(`/pin/edit`, data, cb, () => alert('요청을 수정하는데 실패했습니다.')),
   acceptPin: (data, cb) => pRequest(`/pin/accept`, data, cb, () => alert('요청을 수락하는데 실패했습니다.')),
   createPin: (data, cb) => pRequest(`/pin/create`, data, cb, () => alert('PIN을 생성하는데 실패했습니다.')),

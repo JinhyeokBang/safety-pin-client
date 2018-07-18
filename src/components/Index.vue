@@ -106,7 +106,7 @@
     },
     methods: {
       delpin(id, pin) {
-        api_request.deletePin({session: this.session, id, pin}, () => window.location.reload());
+        api_request.deletePinM({session: this.session, id, pin}, () => window.location.reload());
       },
       student_add() {
         if (this.st_name && this.st_num) api_request.addStudent({
